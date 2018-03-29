@@ -1,1 +1,1 @@
-# pim
+# PIM - Product Interface Manager
