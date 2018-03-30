@@ -1,0 +1,28 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../components/shared-styles.html">
+
+<dom-module id="pim-attributes">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+        </style>
+
+        <div class="card">
+            <div class="circle">2</div>
+            <h1>Attributes</h1>
+            <p>Attributes</p>
+        </div>
+    </template>
+
+    <script>
+        class PimAttributes extends Polymer.Element {
+            static get is() { return 'pim-attributes'; }
+        }
+
+        window.customElements.define(PimAttributes.is, PimAttributes);
+    </script>
+</dom-module>
