@@ -12,17 +12,11 @@ var Utils = {
 
     loading: function(action) {
         if(action) {
-            $("#header").addClass("blur");
-            $("#main").addClass("blur");
-            $(".main-box").addClass("blur");
-            $("#container").addClass("blur");
+            $("#drawer").addClass("blur");
             $("#loader").fadeIn();
         }
         else {
-            $("#header").removeClass("blur");
-            $("#main").removeClass("blur");
-            $(".main-box").removeClass("blur");
-            $("#container").removeClass("blur");
+            $("#drawer").removeClass("blur");
             $("#loader").fadeOut();
         }
     },

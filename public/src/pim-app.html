@@ -14,35 +14,38 @@
                 display: block;
             }
 
-            app-drawer-layout:not([narrow]) [drawer-toggle] {
-                display: none;
-            }
-
             app-header {
                 color: #fff;
                 background-color: var(--app-primary-color);
             }
 
             app-header paper-icon-button {
-                --paper-icon-button-ink-color: white;
+                --paper-icon-button-ink-color: #fff;
+            }
+            app-drawer-layout {
+                --app-drawer-layout-content-transition: margin 0.2s;
             }
 
-            .drawer-list {
-                margin: 0 20px;
+            app-drawer {
+                --app-drawer-content-container: {
+                    background-color: #eee;
+                }
+            }
+            .drawer-content {
+                margin-top: 80px;
+                height: calc(100% - 80px);
+                overflow: auto;
             }
 
             .drawer-list a {
-                display: block;
-                padding: 0 16px;
                 text-decoration: none;
-                color: var(--app-secondary-color);
-                line-height: 40px;
+                color: black;
             }
 
             .drawer-list a.iron-selected {
-                color: black;
-                font-weight: bold;
+                font-weight: bold !important;
             }
+
         </style>
 
         <app-location
@@ -57,26 +60,55 @@
             tail="{{subroute}}">
         </app-route>
 
-        <app-drawer-layout fullbleed narrow="{{narrow}}">
-            <!-- Drawer content -->
-            <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
-                <app-toolbar>Menu</app-toolbar>
-                <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                    <a name="home" href="[[rootPath]]home">Home</a>
-                    <a name="attributes" href="[[rootPath]]attributes">Attributes</a>
-                </iron-selector>
-            </app-drawer>
+        <app-header-layout>
+            <app-header fixed effects="waterfall" slot="header">
+                <app-toolbar>
+                    <paper-icon-button icon="pim-icons:menu" id="toggle"></paper-icon-button>
+                    <div main-title>PIM</div>
+                </app-toolbar>
+            </app-header>
 
-            <!-- Main content -->
-            <app-header-layout has-scrolling-region>
+            <app-drawer-layout id="drawerLayout">
 
-                <app-header slot="header" condenses reveals effects="waterfall">
-                    <app-toolbar>
-                        <paper-icon-button icon="pim-icons:menu" drawer-toggle></paper-icon-button>
-                        <div main-title>PIM</div>
-                    </app-toolbar>
-                </app-header>
+                <app-drawer slot="drawer">
+                    <div class="drawer-content">
+                        <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
+                            <a name="home" href="[[rootPath]]home">
+                                <paper-icon-item>
+                                    <iron-icon icon="inbox" slot="item-icon"></iron-icon>
+                                    <span>Home</span>
+                                </paper-icon-item>
+                            </a>
+                            <a name="attributes" href="[[rootPath]]attributes">
+                                <paper-icon-item>
+                                    <iron-icon icon="query-builder" slot="item-icon"></iron-icon> 
+                                    <span>Attributes</span>
+                                </paper-icon-item>
+                            </a>
+                            <a name="categories" href="[[rootPath]]categories">
+                                <paper-icon-item>
+                                    <iron-icon icon="done" slot="item-icon"></iron-icon>
+                                    <span>Categories</span>
+                                </paper-icon-item>
+                            </a>
 
+                            <paper-icon-item>
+                                <iron-icon icon="drafts" slot="item-icon"></iron-icon> <span>Drafts</span>
+                            </paper-icon-item>
+                            <paper-icon-item>
+                                <iron-icon icon="send" slot="item-icon"></iron-icon> <span>Sent</span>
+                            </paper-icon-item>
+                            <paper-icon-item>
+                                <iron-icon icon="delete" slot="item-icon"></iron-icon> <span>Trash</span>
+                            </paper-icon-item>
+                            <paper-icon-item>
+                                <iron-icon icon="report" slot="item-icon"></iron-icon> <span>Spam</span>
+                            </paper-icon-item>
+                        </iron-selector>
+                    </div>
+                </app-drawer>
+
+                <!-- -->
                 <iron-pages
                     selected="[[page]]"
                     attr-for-selected="name"
@@ -84,10 +116,14 @@
                     role="main">
                     <pim-home name="home"></pim-home>
                     <pim-attributes name="attributes"></pim-attributes>
+                    <pim-categories name="categories"></pim-categories>
                     <pim-404 name="404"></pim-404>
                 </iron-pages>
-            </app-header-layout>
-        </app-drawer-layout>
+
+            </app-drawer-layout>
+
+        </app-header-layout>
+
     </template>
 
     <script>
@@ -98,6 +134,22 @@
         class PimApp extends Polymer.Element {
             static get is() {
                 return 'pim-app';
+            }
+
+            ready() {
+                super.ready();
+
+                Utils.loading(false);
+
+                let drawerLayout = this.$.drawerLayout;
+
+                this.$.toggle.addEventListener('click', function() {
+                    if (drawerLayout.forceNarrow || !drawerLayout.narrow) {
+                        drawerLayout.forceNarrow = !drawerLayout.forceNarrow;
+                    } else {
+                        drawerLayout.drawer.toggle();
+                    }
+                });
             }
 
             static get properties() {
@@ -123,11 +175,6 @@
 
             _routePageChanged(page) {
                 this.page = page || 'home';
-
-                // Close a non-persistent drawer when the page & route are changed.
-                if (!this.$.drawer.persistent) {
-                    this.$.drawer.close();
-                }
             }
 
             _pageChanged(page) {
