@@ -42,6 +42,10 @@
                 font-weight: bold !important;
             }
 
+            [main-title] {
+                margin-left: 20px;
+            }
+
         </style>
 
         <app-location
@@ -61,7 +65,12 @@
                 <app-toolbar>
                     <paper-icon-button icon="pim-icons:menu" id="toggle"></paper-icon-button>
                     <div main-title>PIM</div>
+                    <paper-icon-button icon="search"></paper-icon-button>
                 </app-toolbar>
+                <paper-tabs selected="0" scrollable>
+                    <paper-tab>Catalog</paper-tab>
+                    <paper-tab>Settings</paper-tab>
+                </paper-tabs>
             </app-header>
 
             <app-drawer-layout id="drawerLayout">
