@@ -1,9 +1,5 @@
 <link rel="import" href="../components/elements.html">
 
-<link rel="lazy-import" href="pages/pim-home.html">
-<link rel="lazy-import" href="pages/pim-attributes.html">
-<link rel="lazy-import" href="pages/pim-404.html">
-
 <dom-module id="pim-app">
     <template>
         <style>
@@ -73,37 +69,14 @@
                 <app-drawer slot="drawer">
                     <div class="drawer-content">
                         <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-                            <a name="home" href="[[rootPath]]home">
-                                <paper-icon-item>
-                                    <iron-icon icon="inbox" slot="item-icon"></iron-icon>
-                                    <span>Home</span>
-                                </paper-icon-item>
-                            </a>
-                            <a name="attributes" href="[[rootPath]]attributes">
-                                <paper-icon-item>
-                                    <iron-icon icon="query-builder" slot="item-icon"></iron-icon> 
-                                    <span>Attributes</span>
-                                </paper-icon-item>
-                            </a>
-                            <a name="categories" href="[[rootPath]]categories">
-                                <paper-icon-item>
-                                    <iron-icon icon="done" slot="item-icon"></iron-icon>
-                                    <span>Categories</span>
-                                </paper-icon-item>
-                            </a>
-
-                            <paper-icon-item>
-                                <iron-icon icon="drafts" slot="item-icon"></iron-icon> <span>Drafts</span>
-                            </paper-icon-item>
-                            <paper-icon-item>
-                                <iron-icon icon="send" slot="item-icon"></iron-icon> <span>Sent</span>
-                            </paper-icon-item>
-                            <paper-icon-item>
-                                <iron-icon icon="delete" slot="item-icon"></iron-icon> <span>Trash</span>
-                            </paper-icon-item>
-                            <paper-icon-item>
-                                <iron-icon icon="report" slot="item-icon"></iron-icon> <span>Spam</span>
-                            </paper-icon-item>
+                            <template is="dom-repeat" items="[[links]]">
+                                <a name="[[item.value]]" href="[[rootPath]][[item.value]]">
+                                    <paper-icon-item>
+                                        <iron-icon icon="[[item.icon]]" slot="item-icon"></iron-icon>
+                                        <span>[[item.label]]</span>
+                                    </paper-icon-item>
+                                </a>
+                            </template>
                         </iron-selector>
                     </div>
                 </app-drawer>
@@ -116,7 +89,10 @@
                     role="main">
                     <pim-home name="home"></pim-home>
                     <pim-attributes name="attributes"></pim-attributes>
+                    <pim-brands name="brands"></pim-brands>
                     <pim-categories name="categories"></pim-categories>
+                    <pim-owners name="owners"></pim-owners>
+                    <pim-products name="products"></pim-products>
                     <pim-404 name="404"></pim-404>
                 </iron-pages>
 
@@ -136,6 +112,22 @@
                 return 'pim-app';
             }
 
+            static get properties() {
+                return {
+                    page: {
+                        type: String,
+                        reflectToAttribute: true,
+                        observer: '_pageChanged',
+                    },
+                    routeData: Object,
+                    subroute: Object,
+                    // This shouldn't be neccessary, but the Analyzer isn't picking up
+                    // Polymer.Element#rootPath
+                    rootPath: String,
+                    links: Array,
+                };
+            }
+
             ready() {
                 super.ready();
 
@@ -150,21 +142,15 @@
                         drawerLayout.drawer.toggle();
                     }
                 });
-            }
 
-            static get properties() {
-                return {
-                    page: {
-                        type: String,
-                        reflectToAttribute: true,
-                        observer: '_pageChanged',
-                    },
-                    routeData: Object,
-                    subroute: Object,
-                    // This shouldn't be neccessary, but the Analyzer isn't picking up
-                    // Polymer.Element#rootPath
-                    rootPath: String,
-                };
+                this.links = [
+                    { label: 'Home', value: 'home', icon: 'home' },
+                    { label: 'Attributes', value: 'attributes', icon: 'extension' },
+                    { label: 'Brands', value: 'brands', icon: 'flag' },
+                    { label: 'Categories', value: 'categories', icon: 'card-membership' },
+                    { label: 'Owners', value: 'owners', icon: 'assignment-ind' },
+                    { label: 'Products', value: 'products', icon: 'motorcycle' }
+                ];
             }
 
             static get observers() {
