@@ -12,9 +12,11 @@ Built with:
 * [polymer] - javaScript library for building web applications using Web Components
 * [docker] - software conteinerization platform
 
-Installation:
+## Installation:
 ```sh
 $ docker-compose up -d
+$ npm install
+$ bower install
 ```
 
 
