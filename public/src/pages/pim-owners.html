@@ -2,26 +2,63 @@
 <link rel="import" href="../../components/shared-styles.html">
 
 <dom-module id="pim-owners">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-    </style>
+                padding: 10px;
+            }
+        </style>
 
-    <div class="card">
-      <h1>Owners</h1>
-      <p>Owners</p>
-    </div>
-  </template>
+        <div class="card">
+            <h1>Owners</h1>
 
-  <script>
-    class PimOwners extends Polymer.Element {
-      static get is() { return 'pim-owners'; }
-    }
+            <!-- table -->
+            <paper-card heading="Just a normal data table">
+                <paper-datatable id="datatable" data="{{data}}" selectable multi-selection>
+                    <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Bob ID" property="bob_id" type="Number" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Active" property="active" type="Boolean" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Fiscal" property="fiscal_approval" type="Boolean" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Juridical" property="juridical_approval" type="Boolean" sortable></paper-datatable-column>
+                </paper-datatable>
+            </paper-card>
 
-    window.customElements.define(PimOwners.is, PimOwners);
-  </script>
+        </div>
+    </template>
+
+    <script>
+        class PimOwners extends Polymer.Element {
+          static get is() { return 'pim-owners'; }
+
+          static get properties() {
+                    return {
+                        data: {
+                            type: Array,
+                            value: []
+                        }
+                    };
+                }
+
+                ready() {
+                    super.ready();
+                    this._retrieveFromApi();
+                }
+
+                _retrieveFromApi() {
+                    let self = this;
+                    let url = 'http://catalog.local/owner/';
+
+                    $.getJSON(url,
+                        function(response){
+                            self.data = response._embedded.items;
+                            self.$.datatable.reload();
+                        }
+                    );
+                }
+        }
+
+        window.customElements.define(PimOwners.is, PimOwners);
+    </script>
 </dom-module>

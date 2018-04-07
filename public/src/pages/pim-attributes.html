@@ -13,13 +13,49 @@
 
         <div class="card">
             <h1>Attributes</h1>
-            <p>Attributes</p>
+
+             <!-- table -->
+             <paper-card heading="Just a normal data table">
+                <paper-datatable id="datatable" data="{{data}}" selectable multi-selection>
+                    <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Type" property="type" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Required" property="required" type="Boolean" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Filterable" property="filterable" type="Boolean" sortable></paper-datatable-column>
+                </paper-datatable>
+            </paper-card>
+
         </div>
     </template>
 
     <script>
         class PimAttributes extends Polymer.Element {
             static get is() { return 'pim-attributes'; }
+
+            static get properties() {
+                return {
+                    data: {
+                        type: Array,
+                        value: []
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                this._retrieveFromApi();
+            }
+
+            _retrieveFromApi() {
+                let self = this;
+                let url = 'http://catalog.local/attribute/';
+
+                $.getJSON(url,
+                    function(response){
+                        self.data = response._embedded.items;
+                        self.$.datatable.reload();console.log(self.data);
+                    }
+                );
+            }
         }
 
         window.customElements.define(PimAttributes.is, PimAttributes);

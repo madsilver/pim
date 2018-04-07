@@ -29,7 +29,7 @@
                 }
             }
             .drawer-content {
-                margin-top: 114px;
+                margin-top: 80px;
                 height: calc(100% - 80px);
                 overflow: auto;
             }
@@ -75,10 +75,6 @@
                     <div main-title>PIM</div>
                     <paper-icon-button icon="search"></paper-icon-button>
                 </app-toolbar>
-                <paper-tabs selected="0" scrollable>
-                    <paper-tab>Catalog</paper-tab>
-                    <paper-tab>Settings</paper-tab>
-                </paper-tabs>
             </app-header>
 
             <app-drawer-layout id="drawerLayout">
@@ -157,7 +153,8 @@
                     { label: 'Brands', value: 'brands', icon: 'flag', class: 'green' },
                     { label: 'Categories', value: 'categories', icon: 'card-membership', class: 'red' },
                     { label: 'Owners', value: 'owners', icon: 'assignment-ind', class: 'purple' },
-                    { label: 'Products', value: 'products', icon: 'motorcycle', class: 'brown' }
+                    { label: 'Products', value: 'products', icon: 'motorcycle', class: 'brown' },
+                    { label: 'Settings', value: 'settings', icon: 'settings' }
                 ];
             }
 

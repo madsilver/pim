@@ -2,26 +2,62 @@
 <link rel="import" href="../../components/shared-styles.html">
 
 <dom-module id="pim-brands">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-    </style>
+                padding: 10px;
+            }
+        </style>
 
-    <div class="card">
-      <h1>Brands</h1>
-      <p>Brands</p>
-    </div>
-  </template>
+        <div class="card">
+            <h1>Brands</h1>
 
-  <script>
-    class PimBrands extends Polymer.Element {
-      static get is() { return 'pim-brands'; }
-    }
+            <!-- table -->
+            <paper-card heading="Just a normal data table">
+                <paper-datatable id="datatable" data="{{data}}" selectable multi-selection>
+                    <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Active" property="active" type="Boolean" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Bob ID" property="bob_id" type="Number" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Erp ID" property="erp_id" type="Number" sortable></paper-datatable-column>
+                </paper-datatable>
+            </paper-card>
 
-    window.customElements.define(PimBrands.is, PimBrands);
-  </script>
+        </div>
+    </template>
+
+    <script>
+        class PimBrands extends Polymer.Element {
+            static get is() { return 'pim-brands'; }
+
+             static get properties() {
+                return {
+                    data: {
+                        type: Array,
+                        value: []
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                this._retrieveFromApi();
+            }
+
+            _retrieveFromApi() {
+                let self = this;
+                let url = 'http://catalog.local/brand/';
+
+                $.getJSON(url,
+                    function(response){
+                        self.data = response._embedded.items;
+                        self.$.datatable.reload();
+                    }
+                );
+            }
+        }
+
+        window.customElements.define(PimBrands.is, PimBrands);
+    </script>
 </dom-module>

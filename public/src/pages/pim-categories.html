@@ -13,13 +13,47 @@
 
         <div class="card">
             <h1>Categories</h1>
-            <p>Categories</p>
+
+            <!-- table -->
+            <paper-card heading="Just a normal data table">
+                <paper-datatable id="datatable" data="{{data}}" selectable multi-selection>
+                    <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Path" property="path" type="String" sortable></paper-datatable-column>
+                </paper-datatable>
+            </paper-card>
+
         </div>
     </template>
 
     <script>
         class PimCategories extends Polymer.Element {
             static get is() { return 'pim-categories'; }
+
+            static get properties() {
+                return {
+                    data: {
+                        type: Array,
+                        value: []
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                this._retrieveFromApi();
+            }
+
+            _retrieveFromApi() {
+                let self = this;
+                let url = 'http://catalog.local/category/1/children';
+
+                $.getJSON(url,
+                    function(response){
+                        self.data = response._embedded.items;
+                        self.$.datatable.reload();console.log(self.data);
+                    }
+                );
+            }
         }
 
         window.customElements.define(PimCategories.is, PimCategories);

@@ -20,5 +20,5 @@ services:
         volumes:
             - ./data/db:/data/db
         ports:
-            - 27018:27017
+            - 27019:27017
         command: mongod --smallfiles --logpath=/dev/null # --quiet
