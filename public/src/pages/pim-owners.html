@@ -11,52 +11,67 @@
             }
         </style>
 
-        <div class="card">
-            <h1>Owners</h1>
+        <!-- table -->
+        <paper-datatable-card id="datatableCard" header="Owners" data-source="{{dataSource}}" progress id-property="id" selected-ids="{{selectedIds}}">
+            <div slot="toolbar-main">
+            </div>
+            <div slot="toolbar-select">
+                <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
+            </div>
+            <paper-datatable id="datatable" selectable multi-selection>
+                <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
+                <paper-datatable-column header="Bob ID" property="bob_id" type="Number" sortable></paper-datatable-column>
+                <paper-datatable-column header="Active" property="active" type="Boolean" sortable></paper-datatable-column>
+                <paper-datatable-column header="Fiscal" property="fiscal_approval" type="Boolean" sortable></paper-datatable-column>
+                <paper-datatable-column header="Juridical" property="juridical_approval" type="Boolean" sortable></paper-datatable-column>
+            </paper-datatable>
+        </paper-datatable-card>
 
-            <!-- table -->
-            <paper-card heading="Just a normal data table">
-                <paper-datatable id="datatable" data="{{data}}" selectable multi-selection>
-                    <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
-                    <paper-datatable-column header="Bob ID" property="bob_id" type="Number" sortable></paper-datatable-column>
-                    <paper-datatable-column header="Active" property="active" type="Boolean" sortable></paper-datatable-column>
-                    <paper-datatable-column header="Fiscal" property="fiscal_approval" type="Boolean" sortable></paper-datatable-column>
-                    <paper-datatable-column header="Juridical" property="juridical_approval" type="Boolean" sortable></paper-datatable-column>
-                </paper-datatable>
-            </paper-card>
-
-        </div>
     </template>
 
     <script>
         class PimOwners extends Polymer.Element {
-          static get is() { return 'pim-owners'; }
+            static get is() { return 'pim-owners'; }
 
-          static get properties() {
-                    return {
-                        data: {
-                            type: Array,
-                            value: []
-                        }
-                    };
-                }
+            static get properties() {
+                return {
+                    dataSource: {
+                        type: Object,
+                        value: {}
+                    }
+                };
+            }
 
-                ready() {
-                    super.ready();
-                    this._retrieveFromApi();
-                }
+            ready() {
+                super.ready();
+                this._retrieveFromApi();
+            }
 
-                _retrieveFromApi() {
-                    let self = this;
-                    let url = 'http://catalog.local/owner/';
+            _retrieveFromApi() {
+                let self = this;
 
-                    $.getJSON(url,
-                        function(response){
-                            self.data = response._embedded.items;
-                            self.$.datatable.reload();
-                        }
-                    );
-                }
+                this.dataSource = {
+                    get: function(sort, page, pageSize){
+                        let url = Utils.defineUrl('owner/', sort, page, pageSize);
+                        return new Promise(function(resolve, reject){
+
+                            $.getJSON(url,
+                                function(response){
+                                    let data = response._embedded.items;
+                                    self.set('dataSource.length', response.total);
+                                    resolve(data);
+                                }
+                            );
+
+                        });
+                    },
+
+                    set: function(id, property, value){
+                        console.info("a save was triggered", arguments);
+                    },
+                    length:0
+                };
+            }
         }
 
         window.customElements.define(PimOwners.is, PimOwners);

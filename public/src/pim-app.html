@@ -54,6 +54,10 @@
             .purple { color: #9C27B0; }
             .brown { color: #795548; }
 
+            span.title-menu {
+                font-size: 14px;
+            }
+
         </style>
 
         <app-location
@@ -87,7 +91,7 @@
                                 <a name="[[item.value]]" href="[[rootPath]][[item.value]]">
                                     <paper-icon-item>
                                         <iron-icon icon="[[item.icon]]" slot="item-icon" class$="[[item.class]]"></iron-icon>
-                                        <span>[[item.label]]</span>
+                                        <span class="title-menu">[[item.label]]</span>
                                     </paper-icon-item>
                                 </a>
                             </template>
