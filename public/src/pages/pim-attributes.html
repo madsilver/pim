@@ -63,7 +63,10 @@
                                     self.set('dataSource.length', response.total);
                                     resolve(data);
                                 }
-                            );
+                            )
+                            .fail(function() {
+                                Utils.toast("Error, check your settings", false);
+                             });
 
                         });
                     },

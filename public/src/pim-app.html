@@ -118,6 +118,8 @@
 
         </app-header-layout>
 
+        <paper-toast id="toast"></paper-toast>
+
     </template>
 
     <script>
@@ -148,6 +150,8 @@
 
             ready() {
                 super.ready();
+
+                Polymer.toastElement = this.$.toast;
 
                 this.links = [
                     { label: 'Home', value: 'home', icon: 'dashboard', class: 'blue' },
