@@ -28,7 +28,7 @@
             </div>
             <div slot="toolbar-select">
                 <paper-icon-button icon="create" on-tap="_editItem"></paper-icon-button>
-                <paper-icon-button icon="delete" on-tap=""></paper-icon-button>
+                <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
             </div>
             <paper-datatable id="datatable" selectable>
                 <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
@@ -80,7 +80,10 @@
                                     self.set('dataSource.length', response.total);
                                     resolve(data);
                                 }
-                            );
+                            )
+                            .fail(function() {
+                                Utils.toast("Error, check your settings", false);
+                             });
 
                         });
                     },

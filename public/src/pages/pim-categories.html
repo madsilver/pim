@@ -17,22 +17,26 @@
                 <div slot="toolbar-main">
                 </div>
                 <div slot="toolbar-select">
+                    <paper-icon-button icon="arrow-downward" on-tap="_childrens"></paper-icon-button>
+                    <paper-icon-button icon="arrow-upward" on-tap="_ancestors"></paper-icon-button>
                     <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
                 </div>
                 <paper-datatable id="datatable" selectable>
                     <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
                     <paper-datatable-column header="Path" property="path" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Root" property="root" type="Number" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Parent" property="parent" type="Number" sortable></paper-datatable-column>
                 </paper-datatable>
             </paper-datatable-card>
 
              <!-- table queues-->
-            <paper-datatable-card id="datatableCard" header="Approvals" data-source="" progress id-property="id">
+            <paper-datatable-card id="datatableCard2" header="Approvals" data-source="" progress id-property="id">
                 <div slot="toolbar-main">
                 </div>
                 <div slot="toolbar-select">
                     <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
                 </div>
-                <paper-datatable id="datatable" selectable>
+                <paper-datatable id="datatable2" selectable>
                     <paper-datatable-column header="Request" property="request" type="String" sortable></paper-datatable-column>
                     <paper-datatable-column header="Approve" property="approve" type="Boolean" sortable></paper-datatable-column>
                     <paper-datatable-column header="Date" property="date" type="String" sortable></paper-datatable-column>
@@ -68,7 +72,7 @@
 
                 this.dataSource = {
                     get: function(sort, page, pageSize){
-                        let url = Utils.defineUrl('category/1/children', sort, page, pageSize);
+                        let url = Utils.defineUrl('category/', sort, page, pageSize);
                         return new Promise(function(resolve, reject){
 
                             $.getJSON(url,
@@ -77,7 +81,86 @@
                                     self.set('dataSource.length', response.total);
                                     resolve(data);
                                 }
-                            );
+                            )
+                            .fail(function() {
+                                Utils.toast("Error, check your settings", false);
+                             });
+
+                        });
+                    },
+
+                    set: function(id, property, value){
+                        console.info("a save was triggered", arguments);
+                    },
+                    length:0
+                };
+            }
+
+            _childrens() {
+                let self = this;
+                let category = this.$.datatable.selectedItem;
+                let resource = `category/${category.id}/children`;
+                this.dataSource = {
+                    get: function(sort, page, pageSize){
+                        let url = Utils.defineUrl(resource, sort, page, pageSize);
+                        return new Promise(function(resolve, reject){
+
+                            $.getJSON(url,
+                                function(response){
+                                    if(response._embedded.items.length < 1) {
+                                        Utils.toast("Category without childrens");
+                                        resolve(data);
+                                        return;
+                                    }
+                                    let data = response._embedded.items;
+                                    self.set('dataSource.length', response.total);
+                                    resolve(data);
+                                }
+                            )
+                            .fail(function() {
+                                Utils.toast("Error, check your settings", false);
+                             })
+                             .always(function() {
+                                self.$.datatableCard.deselectAll();
+                             });
+
+                        });
+                    },
+
+                    set: function(id, property, value){
+                        console.info("a save was triggered", arguments);
+                    },
+                    length:0
+                };
+            }
+
+            _ancestors() {
+                let self = this;
+                let category = this.$.datatable.selectedItem;
+                let resource = `category/${category.id}/ancestors`;
+                this.dataSource = {
+                    get: function(sort, page, pageSize){
+                        let url = Utils.defineUrl(resource, sort, page, pageSize);
+                        return new Promise(function(resolve, reject){
+
+                            $.getJSON(url,
+                                function(response){
+                                    if(response._embedded.items.length < 1) {
+                                        Utils.toast("Category without ancestors");
+                                        resolve(data);
+                                        return;
+                                    }
+                                    let data = response._embedded.items;
+                                    self.set('dataSource.length', response.total);
+                                    resolve(data);
+                                }
+                            )
+                            .fail(function() {
+                                Utils.toast("Error, check your settings", false);
+                             })
+                             .always(function() {
+                                self.$.datatableCard.deselectAll();
+                             });
 
                         });
                     },

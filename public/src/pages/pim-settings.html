@@ -15,6 +15,7 @@
             <paper-card heading="Settings" alt="Settings" class="flexchild">
                 <div class="card-content">
                     <paper-input value="{{settings.apiUrl}}" label="Api URL"></paper-input>
+                    <paper-input value="{{settings.company}}" label="Company"></paper-input>
                 </div>
                 <div class="card-actions">
                     <paper-button on-tap="_onSave">Save</paper-button>
@@ -46,7 +47,6 @@
                 $.getJSON(url,
                     function(response){
                         self.settings = response;
-                        console.log(response);
                     }
                 );
             }
@@ -58,10 +58,11 @@
                     method: "PUT",
                     url: "http://localhost:3001/api/settings",
                     dataType: "json",
-                    data: self.settings
-                })
-                .done(function( msg ) {
-                    self._retrieveFromApi();
+                    data: self.settings,
+                    complete: function(data) {
+                        localStorage.api = self.settings.apiUrl;
+                        Utils.toast("Settings have been updated!");
+                    }
                 });
             }
         }

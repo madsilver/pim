@@ -31,5 +31,5 @@ COPY package.json .
 COPY bower.json .
 COPY .bowerrc .
 
-# RUN npm install --quiet
-# RUN bower install --quiet --allow-root
+RUN npm install --quiet
+RUN bower install --quiet --allow-root
