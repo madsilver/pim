@@ -11,18 +11,37 @@
             }
         </style>
 
-        <!-- table -->
-        <paper-datatable-card id="datatableCard" header="Categories" data-source="{{dataSource}}" progress id-property="id" selected-ids="{{selectedIds}}">
-            <div slot="toolbar-main">
-            </div>
-            <div slot="toolbar-select">
-                <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
-            </div>
-            <paper-datatable id="datatable" selectable multi-selection>
-                <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
-                <paper-datatable-column header="Path" property="path" type="String" sortable></paper-datatable-column>
-            </paper-datatable>
-        </paper-datatable-card>
+        <div class="container">
+             <!-- table categories -->
+            <paper-datatable-card id="datatableCard" header="Categories" data-source="{{dataSource}}" progress id-property="id" class="flexchild">
+                <div slot="toolbar-main">
+                </div>
+                <div slot="toolbar-select">
+                    <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
+                </div>
+                <paper-datatable id="datatable" selectable>
+                    <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Path" property="path" type="String" sortable></paper-datatable-column>
+                </paper-datatable>
+            </paper-datatable-card>
+
+             <!-- table queues-->
+            <paper-datatable-card id="datatableCard" header="Approvals" data-source="" progress id-property="id">
+                <div slot="toolbar-main">
+                </div>
+                <div slot="toolbar-select">
+                    <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
+                </div>
+                <paper-datatable id="datatable" selectable>
+                    <paper-datatable-column header="Request" property="request" type="String" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Approve" property="approve" type="Boolean" sortable></paper-datatable-column>
+                    <paper-datatable-column header="Date" property="date" type="String" sortable></paper-datatable-column>
+                </paper-datatable>
+            </paper-datatable-card>
+        </div>
+
+        <!-- fab -->
+        <paper-fab icon="add" title="Add" class="actions" on-tap="_addItem"></paper-fab>
 
     </template>
 

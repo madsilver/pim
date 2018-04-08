@@ -2,26 +2,83 @@
 <link rel="import" href="../../components/shared-styles.html">
 
 <dom-module id="pim-products">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-    </style>
+                padding: 10px;
+            }
+        </style>
 
-    <div class="card">
-      <h1>Products</h1>
-      <p>Products</p>
-    </div>
-  </template>
+        <!-- table -->
+        <paper-datatable-card id="datatableCard" header="Products" data-source="{{dataSource}}" progress id-property="id" page-size="5">
+            <div slot="toolbar-main">
+            </div>
+            <div slot="toolbar-select">
+                <paper-icon-button icon="create" on-tap="_editItem"></paper-icon-button>
+                <paper-icon-button icon="delete" on-tap=""></paper-icon-button>
+            </div>
+            <paper-datatable id="datatable" selectable>
+                <paper-datatable-column header="SKU" property="sku" type="String" sortable></paper-datatable-column>
+                <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
+                <paper-datatable-column header="Brand" property="brand" type="String" sortable></paper-datatable-column>
+                <paper-datatable-column header="Owner" property="owner" type="String" sortable></paper-datatable-column>
+                <paper-datatable-column header="Price" property="price" type="Number" sortable></paper-datatable-column>
+                <paper-datatable-column header="Originalss Price" property="original_price" type="Number" sortable></paper-datatable-column>
+            </paper-datatable>
+        </paper-datatable-card>
 
-  <script>
-    class PimProducts extends Polymer.Element {
-      static get is() { return 'pim-products'; }
-    }
+        <!-- fab -->
+        <paper-fab icon="add" title="Add" class="actions" on-tap="_addItem"></paper-fab>
 
-    window.customElements.define(PimProducts.is, PimProducts);
-  </script>
+    </template>
+
+    <script>
+        class PimProducts extends Polymer.Element {
+            static get is() { return 'pim-products'; }
+
+             static get properties() {
+                return {
+                    dataSource: {
+                        type: Object,
+                        value: {}
+                    }
+                };
+            }
+
+            ready() {
+                super.ready();
+                this._retrieveFromApi();
+            }
+
+            _retrieveFromApi() {
+                let self = this;
+
+                this.dataSource = {
+                    get: function(sort, page, pageSize){
+                        let url = Utils.defineUrl('product/', sort, page, pageSize);
+                        return new Promise(function(resolve, reject){
+
+                            $.getJSON(url,
+                                function(response){
+                                    let data = response._embedded.items;
+                                    self.set('dataSource.length', response.total);
+                                    resolve(data);
+                                }
+                            );
+
+                        });
+                    },
+
+                    set: function(id, property, value){
+                        console.info("a save was triggered", arguments);
+                    },
+                    length:0
+                };
+            }
+        }
+
+        window.customElements.define(PimProducts.is, PimProducts);
+    </script>
 </dom-module>

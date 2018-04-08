@@ -11,20 +11,35 @@
             }
         </style>
 
+        <!-- dialog -->
+        <paper-dialog id="actionDialog">
+            <h2>{{currAction}}</h2>
+            <paper-input value="{{brand.name}}" label="Name"></paper-input>
+            <paper-input value="{{brand.description}}" label="Description"></paper-input>
+            <div class="buttons">
+                <paper-button raised dialog-dismiss on-tap="_onCancelDialog">CANCEL</paper-button>
+                <paper-button raised dialog-confirm on-tap="_onConfirmDialog">OK</paper-button>
+            </div>
+        </paper-dialog>
+
         <!-- table -->
-        <paper-datatable-card id="datatableCard" header="Brands" data-source="{{dataSource}}" progress id-property="id" selected-ids="{{selectedIds}}">
+        <paper-datatable-card id="datatableCard" header="Brands" data-source="{{dataSource}}" progress id-property="id" page-size="5">
             <div slot="toolbar-main">
             </div>
             <div slot="toolbar-select">
-                <paper-icon-button icon="delete" on-tap="delete"></paper-icon-button>
+                <paper-icon-button icon="create" on-tap="_editItem"></paper-icon-button>
+                <paper-icon-button icon="delete" on-tap=""></paper-icon-button>
             </div>
-            <paper-datatable id="datatable" selectable multi-selection>
+            <paper-datatable id="datatable" selectable>
                 <paper-datatable-column header="Name" property="name" type="String" sortable></paper-datatable-column>
                 <paper-datatable-column header="Active" property="active" type="Boolean" sortable></paper-datatable-column>
                 <paper-datatable-column header="Bob ID" property="bob_id" type="Number" sortable></paper-datatable-column>
                 <paper-datatable-column header="Erp ID" property="erp_id" type="Number" sortable></paper-datatable-column>
             </paper-datatable>
         </paper-datatable-card>
+
+        <!-- fab -->
+        <paper-fab icon="add" title="Add" class="actions" on-tap="_addItem"></paper-fab>
 
     </template>
 
@@ -37,7 +52,12 @@
                     dataSource: {
                         type: Object,
                         value: {}
-                    }
+                    },
+                    brand: {
+                        type: Object,
+                        value: {}
+                    },
+                    currAction: String
                 };
             }
 
@@ -70,6 +90,26 @@
                     },
                     length:0
                 };
+            }
+
+            _addItem() {
+                this.currAction = 'New brand';
+                this.$.actionDialog.open();
+            }
+
+            _editItem() {
+                this.currAction = 'Edit brand';
+                this.brand = this.$.datatable.selectedItem;
+                this.$.actionDialog.open();
+            }
+
+            _onConfirmDialog() {
+                this.$.datatableCard.deselectAll();
+            }
+
+            _onCancelDialog() {
+                this.$.datatableCard.deselectAll();
+                this.brand = {};
             }
         }
 
