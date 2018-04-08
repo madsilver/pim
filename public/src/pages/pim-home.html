@@ -2,26 +2,33 @@
 <link rel="import" href="../../components/shared-styles.html">
 
 <dom-module id="pim-home">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-    </style>
+                padding: 10px;
+            }
+        </style>
 
-    <div class="card">
-      <h1>Home</h1>
-      <p>Home</p>
-    </div>
-  </template>
+        <div class="container">
+            <paper-card heading="Home" alt="home" class="flexchild">
+                <div class="card-content">
+
+                </div>
+                <div class="card-actions">
+
+                </div>
+            </paper-card>
+        </div>
+
+    </template>
 
   <script>
-    class PimHome extends Polymer.Element {
-      static get is() { return 'pim-home'; }
-    }
+      class PimHome extends Polymer.Element {
+          static get is() { return 'pim-home'; }
+      }
 
-    window.customElements.define(PimHome.is, PimHome);
+      window.customElements.define(PimHome.is, PimHome);
   </script>
 </dom-module>

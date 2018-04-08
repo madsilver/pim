@@ -2,26 +2,70 @@
 <link rel="import" href="../../components/shared-styles.html">
 
 <dom-module id="pim-settings">
-  <template>
-    <style include="shared-styles">
-      :host {
-        display: block;
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
 
-        padding: 10px;
-      }
-    </style>
+                padding: 10px;
+            }
+        </style>
 
-    <div class="card">
-      <h1>Settings</h1>
-      <p>Settings</p>
-    </div>
-  </template>
+        <div class="container">
+            <paper-card heading="Settings" alt="Settings" class="flexchild">
+                <div class="card-content">
+                    <paper-input value="{{settings.apiUrl}}" label="Api URL"></paper-input>
+                </div>
+                <div class="card-actions">
+                    <paper-button on-tap="_onSave">Save</paper-button>
+                </div>
+            </paper-card>
+        </div>
 
-  <script>
-    class PimSettings extends Polymer.Element {
-      static get is() { return 'pim-settings'; }
-    }
+    </template>
 
-    window.customElements.define(PimSettings.is, PimSettings);
-  </script>
+    <script>
+        class PimSettings extends Polymer.Element {
+            static get is() { return 'pim-settings'; }
+
+            static get properties() {
+                return {
+                    settings: Array
+                };
+            }
+
+            ready() {
+                super.ready();
+                this._retrieveFromApi();
+            }
+
+            _retrieveFromApi() {
+                let self = this;
+                let url = 'http://localhost:3001/api/settings';
+
+                $.getJSON(url,
+                    function(response){
+                        self.settings = response;
+                        console.log(response);
+                    }
+                );
+            }
+
+            _onSave() {
+                let self = this;
+
+                $.ajax({
+                    method: "PUT",
+                    url: "http://localhost:3001/api/settings",
+                    dataType: "json",
+                    data: self.settings
+                })
+                .done(function( msg ) {
+                    self._retrieveFromApi();
+                });
+            }
+        }
+
+        window.customElements.define(PimSettings.is, PimSettings);
+    </script>
 </dom-module>

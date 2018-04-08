@@ -2,8 +2,10 @@ let Utils = {
 
     defineUrl: function(resource, sort, page, pageSize) {
         let url = `http://catalog.local/${resource}`;
-        let _url = url+`?page=${page}&limit=${pageSize}&sort=${sort.property}&order=${sort.direction}`;
-        return _url;
+        if(sort || page || pageSize) {
+            url = url+`?page=${page}&limit=${pageSize}&sort=${sort.property}&order=${sort.direction}`;
+        }
+        return url;
     },
 
     loading: function(action) {
