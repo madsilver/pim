@@ -1,7 +1,8 @@
 const mongoose = require("mongoose");
-const dbUri = "mongodb://localhost:27019/pim";
+const config = require("../config/config");
+
 mongoose.Promise = global.Promise;
-mongoose.connect(dbUri);
+mongoose.connect(config.dbUri);
 
 
 process.on("SIGNIT", function() {

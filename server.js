@@ -1,8 +1,7 @@
 let express = require("express");
 let app = express();
 let bodyParser = require("body-parser");
-
-let port = 3001
+let config = require("./app/config/config");
 
 require('./app/helpers/db');
 
@@ -31,6 +30,6 @@ app.route("/api/settings")
 
 app.use("*", require("./app/routes/default"));
 
-app.listen(port, () => {
-    console.log(`server running at port ${port}`)
+app.listen(config.port, () => {
+    console.log(`server running at port ${config.port}`)
 })
