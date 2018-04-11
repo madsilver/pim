@@ -4,7 +4,11 @@ const bodyParser = require("body-parser");
 const config = require("./app/config/config");
 const path = require("path");
 const fs = require("fs");
+const session = require("client-sessions");
 require('./app/helpers/db');
+
+// session
+app.use(session(config.session));
 
 // templates
 app.set("view engine", "pug");

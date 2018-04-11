@@ -51,6 +51,4 @@ let Utils = {
         toast.open();
     }
 
-
-
 };

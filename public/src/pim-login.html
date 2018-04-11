@@ -72,11 +72,31 @@
                 return 'pim-login';
             }
 
+            static get properties() {
+                return {
+                    user: Object,
+                };
+            }
+
             ready() {
                 super.ready();
+                this.user = { email: '', password: '' };
+                Polymer.toastElement = this.$.toast;
             }
 
             _login() {
+                let self = this;
+
+                $.post('/api/login',
+                    self.user, {}, 'json'
+                )
+                .always(function(resp) {
+                    if(resp.error) {
+                        Utils.toast(resp.msg, false);
+                        return;
+                    }
+                    window.location = "/";
+                });
 
             }
 
