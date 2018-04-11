@@ -1,10 +1,8 @@
 let Utils = {
 
-    url: 'http://localhost:3001',
-
     defineUrl: function(resource, sort, page, pageSize) {
         if(!localStorage.api) {
-            this.persistApiUrl();
+            this.persistUrlApi();
         }
 
         let url = localStorage.api + '/' + resource;
@@ -14,14 +12,12 @@ let Utils = {
         return url;
     },
 
-    persistApiUrl: function() {
-        let url = this.url + '/api/settings';
-
+    persistUrlApi: function() {
         $.ajax({
-            url: url,
+            url: '/api/settings',
             async: false,
             complete: function(res){
-                localStorage.api = res.responseJSON.apiUrl;
+                localStorage.api = res.responseJSON.urlApi;
             }
         });
     },

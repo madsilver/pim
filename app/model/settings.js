@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 var SettingsSchema = new Schema({
-    apiUrl: { type: String, required: true },
+    urlApi: { type: String, required: true },
     company: { type: String }
 },{
     versionKey: false

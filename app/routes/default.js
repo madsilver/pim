@@ -2,7 +2,10 @@ let express = require("express");
 let router = express.Router();
 
 router.get('*', (req, res) => {
-    res.sendFile(process.cwd()+'/public/index.html');
+    let logged = true;
+
+    res.render('index', { 'logged': logged });
+    //res.sendFile(process.cwd()+'/public/bkp_index.html');
 });
 
 module.exports = router;
