@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
     web:
         build: .
@@ -7,13 +7,9 @@ services:
             - .:/usr/app/
         ports:
             - "3001:3001"
-        depends_on:
-            - mongodb
         links:
-            - mongodb:db.pim.local
-    mongodb:
+            - mongo
+    mongo:
         image: mongo:3.2.18
-        environment:
-            - VIRTUAL_HOST=db.pim.local
         ports:
-            - 27019:27017
+            - "27019:27017"

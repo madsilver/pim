@@ -1,6 +1,6 @@
 FROM ubuntu:latest
 
-LABEL maintainer Silver
+LABEL maintainer "Silver"
 
 EXPOSE 80 443 3001
 
