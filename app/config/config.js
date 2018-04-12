@@ -1,12 +1,12 @@
 module.exports = {
 
-    dbUri: "mongodb://localhost:27017/pim",
+    dbUri: "mongodb://localhost:27019/pim",
 
-    port: 8080,
+    port: 3001,
 
     session: {
         cookieName: "session",
-        secret: "s1lv3r",
+        secret: "si1v3r",
         duration: 20 * 60 * 1000,
         cookie: {
             maxAge: 20 * 60 * 1000, // duration of the cookie in milliseconds, defaults to duration above

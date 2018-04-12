@@ -1,0 +1,45 @@
+{
+    "links": [
+        {
+            "label": "Home",
+            "value": "home",
+            "icon": "dashboard",
+            "class": "blue"
+        },
+        {
+            "label": "Attributes",
+            "value": "attributes",
+            "icon": "apps",
+            "class": "orange"
+        },
+        {
+            "label": "Brands",
+            "value": "brands",
+            "icon": "flag",
+            "class": "green"
+        },
+        {
+            "label": "Categories",
+            "value": "categories",
+            "icon": "card-membership",
+            "class": "red"
+        },
+        {
+            "label": "Owners",
+            "value": "owners",
+            "icon": "assignment-ind",
+            "class": "purple"
+        },
+        {
+            "label": "Products",
+            "value": "products",
+            "icon": "motorcycle",
+            "class": "brown"
+        },
+        {
+            "label": "Settings",
+            "value": "settings",
+            "icon": "settings"
+        }
+    ]
+}
