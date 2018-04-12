@@ -1,0 +1,107 @@
+<link rel="import" href="../components/elements.html">
+
+<dom-module id="pim-login">
+    <template>
+        <style include="shared-styles">
+            :host {
+                display: block;
+
+                padding: 10px;
+            }
+            .container {
+                display: -webkit-box;
+                display: -moz-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex;
+                -webkit-flex-direction: column;
+                flex-direction: column;
+                min-height: 100vh;
+                position: relative; }
+
+            .container:before {
+                min-height: 30px;
+                -webkit-box-flex: 1;
+                box-flex: 1;
+                -webkit-flex-grow: 1;
+                flex-grow: 0.44;
+                content: '';
+                display: block;
+                height: 24px; }
+
+            paper-card.login {
+                -webkit-flex-shrink: 0;
+                flex-shrink: 0;
+                background: #fff;
+                display: block;
+                margin: 0 auto;
+                min-height: 0;
+                width: 450px;
+                flex-direction: column;
+                -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+                max-width: 100%;
+                position: relative;
+                z-index: 2; }
+        </style>
+
+        <div class="container">
+            <paper-card heading="Login" alt="Login" class="flexchild login">
+                <div class="card-content">
+                    <paper-input value="{{user.email}}" label="Email"></paper-input>
+                    <paper-input value="{{user.password}}" type="password" label="Password"></paper-input>
+                </div>
+                <div class="card-actions">
+                    <paper-button on-tap="_login">OK</paper-button>
+                </div>
+            </paper-card>
+        </div>
+
+
+        <paper-toast id="toast"></paper-toast>
+
+    </template>
+
+    <script>
+        // Gesture events like tap and track generated from touch will not be
+        // preventable, allowing for better scrolling performance.
+        Polymer.setPassiveTouchGestures(true);
+
+        class PimLogin extends Polymer.Element {
+            static get is() {
+                return 'pim-login';
+            }
+
+            static get properties() {
+                return {
+                    user: Object,
+                };
+            }
+
+            ready() {
+                super.ready();
+                this.user = { email: '', password: '' };
+                Polymer.toastElement = this.$.toast;
+            }
+
+            _login() {
+                let self = this;
+
+                $.post('/api/login',
+                    self.user, {}, 'json'
+                )
+                .always(function(resp) {
+                    if(resp.error) {
+                        Utils.toast(resp.msg, false);
+                        return;
+                    }
+                    window.location = "/";
+                });
+
+            }
+
+        }
+
+        window.customElements.define(PimLogin.is, PimLogin);
+    </script>
+</dom-module>

@@ -12,9 +12,9 @@
         </style>
 
         <div class="container">
-            <paper-card heading="Settings" alt="Settings" class="flexchild">
+            <paper-card heading="API" alt="Settings" class="flexchild">
                 <div class="card-content">
-                    <paper-input value="{{settings.apiUrl}}" label="Api URL"></paper-input>
+                    <paper-input value="{{settings.urlApi}}" label="URL API"></paper-input>
                     <paper-input value="{{settings.company}}" label="Company"></paper-input>
                 </div>
                 <div class="card-actions">
@@ -31,7 +31,7 @@
 
             static get properties() {
                 return {
-                    settings: Array
+                    settings: Object
                 };
             }
 
@@ -42,25 +42,26 @@
 
             _retrieveFromApi() {
                 let self = this;
-                let url = 'http://localhost:3001/api/settings';
+                let url = '/api/settings';
 
                 $.getJSON(url,
                     function(response){
-                        self.settings = response;
+                        self.settings = response || {};
                     }
                 );
             }
 
             _onSave() {
                 let self = this;
+                let method = self.settings._id ? 'PUT' : 'POST';
 
                 $.ajax({
-                    method: "PUT",
-                    url: "http://localhost:3001/api/settings",
+                    method: method,
+                    url: "/api/settings",
                     dataType: "json",
                     data: self.settings,
                     complete: function(data) {
-                        localStorage.api = self.settings.apiUrl;
+                        localStorage.api = self.settings.urlApi;
                         Utils.toast("Settings have been updated!");
                     }
                 });

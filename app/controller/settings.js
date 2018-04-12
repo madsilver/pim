@@ -2,25 +2,25 @@ const model = require("../model/settings");
 
 module.exports = {
 
-    get: function(req, res) {
-        model.findOne(function(err, doc) {
+    get: (req, res) => {
+        model.findOne((err, doc) => {
             if(err) res.send(err);
             else res.json(doc);
         });
     },
 
-    post: function(req, res) {
-        model.create(req.body, function(err, doc) {
+    post: (req, res) => {
+        model.create(req.body, (err, doc) => {
             if(err) res.send(err);
             else res.json(doc);
         });
 
     },
 
-    put: function(req, res) {
+    put: (req, res) => {
         let query = { _id: req.body._id };
         let options = { upsert: false };
-        model.update(query, req.body, options, function(err, affected) {
+        model.update(query, req.body, options, (err, affected) => {
             if(err) res.send(err);
             else res.sendStatus(200);
         });
