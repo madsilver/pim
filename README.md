@@ -12,11 +12,16 @@ Built with:
 * [polymer] - javaScript library for building web applications using Web Components
 * [docker] - software conteinerization platform
 
-## Installation:
+### Installation
 ```sh
 $ docker-compose up -d
 $ npm install
 $ bower install
+```
+
+### Create user admin
+```sh
+$ docker exec -it pim_mongo_1 bash -c 'mongo pim --eval "db.users.insert({email:\"admin\"})"'
 ```
 
 
